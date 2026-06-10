@@ -13,6 +13,7 @@
      Why is this knowledge valuable, and why is it hard to find through official channels?
      Example: "Student reviews of CS professors at [university] — useful because official
      course descriptions don't reflect teaching style, exam difficulty, or workload." -->
+     The domain chosen is off-campus housing options and reviews (UCF). This knowledge is valuable to new (transfer) students or students transferring out of campus housing, to allow them to make an informed decision and to have the best experience possible. Whilst UCF offers a list of off-campus options, it does not provide further information or reviews. 
 
 ---
 
@@ -24,16 +25,17 @@
 
 | # | Source | Type | URL or file path |
 |---|--------|------|-----------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
+| 1 | UCF Website | List of Off-Campus shuttle routes and corresponding off-campus housing stops|https://parking.ucf.edu/transportation/off-campus/  | 
+| 2 | Unofficial UCF Reddit | Post about the experience of looking for off-campus housing and not finding a good option, comments share experiences and recommendations | https://www.reddit.com/r/ucf/comments/1i1bv63/why_does_ucf_not_have_any_good_apartment_options/ |
+| 3 | Unofficial UCF Reddit | Post about worst housing experiences, commments explore different points of view and experiences at particular places| https://www.reddit.com/r/ucf/comments/1agryxz/whats_the_worst_housing_in_the_ucf_area/ |
+| 4 | Unofficial UCF Reddit | Post asking for off-campus housing horror stories, comments mention experiences (some mentioning places/complexes names) | https://www.reddit.com/r/ucf/comments/1tgsx72/please_tell_me_your_offcampus_housing_horror/ |
+| 5 | Unofficial UCF Reddit | Post asking about best off-campus complexes, comments talka about pricing and experiences | https://www.reddit.com/r/ucf/comments/1r2n0ud/best_off_campus_complexes/ |
+| 6 | Unofficial UCF Reddit | Post from a year ago asking about best housing options, comments share both good and bad experiences in multiple places | https://www.reddit.com/r/ucf/comments/1e7dmvz/best_offcampus_housing/ |
+| 7 | Unofficial UCF Reddit | Post asking about on-campus vs off-campus for freshman year | https://www.reddit.com/r/ucf/comments/1gu04yt/on_or_off_campus_housing/ |
+| 8 | Unofficial UCF Reddit | Post asking about experiences between 3 off-campus options (Mercury 3100, Lofts, Hub), comments expand on them but also suggest others | https://www.reddit.com/r/ucf/comments/1kohehb/which_off_campus_housing_should_i_move_in/ |
+| 9 | Unofficial UCF Reddit | Recent post about affordable off campus options (less than 1k)| https://www.reddit.com/r/ucf/comments/1qmomqs/off_campus_housing/ |
+| 10 | Unofficial UCF Reddit | Post asking about how off-campus shuttles work, comments explain and share experiences | https://www.reddit.com/r/ucf/comments/p63pou/how_does_offcampus_shuttles_work/ |
+
 
 ---
 

@@ -25,7 +25,7 @@ The domain chosen is off-campus housing options and reviews (UCF). This knowledg
 | 2 | Unofficial UCF Reddit | Post about the experience of looking for off-campus housing and not finding a good option, comments share experiences and recommendations | https://www.reddit.com/r/ucf/comments/1i1bv63/why_does_ucf_not_have_any_good_apartment_options/ |
 | 3 | Unofficial UCF Reddit | Post about worst housing experiences, commments explore different points of view and experiences at particular places| https://www.reddit.com/r/ucf/comments/1agryxz/whats_the_worst_housing_in_the_ucf_area/ |
 | 4 | Unofficial UCF Reddit | Post asking for off-campus housing horror stories, comments mention experiences (some mentioning places/complexes names) | https://www.reddit.com/r/ucf/comments/1tgsx72/please_tell_me_your_offcampus_housing_horror/ |
-| 5 | Unofficial UCF Reddit | Post asking about best off-campus complexes, comments talka about pricing and experiences | https://www.reddit.com/r/ucf/comments/1r2n0ud/best_off_campus_complexes/ |
+| 5 | Unofficial UCF Reddit | Post asking about best off-campus complexes, comments talk about pricing and experiences | https://www.reddit.com/r/ucf/comments/1r2n0ud/best_off_campus_complexes/ |
 | 6 | Unofficial UCF Reddit | Post from a year ago asking about best housing options, comments share both good and bad experiences in multiple places | https://www.reddit.com/r/ucf/comments/1e7dmvz/best_offcampus_housing/ |
 | 7 | Unofficial UCF Reddit | Post asking about on-campus vs off-campus for freshman year | https://www.reddit.com/r/ucf/comments/1gu04yt/on_or_off_campus_housing/ |
 | 8 | Unofficial UCF Reddit | Post asking about experiences between 3 off-campus options (Mercury 3100, Lofts, Hub), comments expand on them but also suggest others | https://www.reddit.com/r/ucf/comments/1kohehb/which_off_campus_housing_should_i_move_in/ |
@@ -41,11 +41,11 @@ The domain chosen is off-campus housing options and reviews (UCF). This knowledg
      numbers fit the structure of your documents.
      A review-heavy corpus warrants different chunking than a long FAQ. -->
 
-**Chunk size:**
+**Chunk size:** 250 tokens
 
-**Overlap:**
+**Overlap:** 50 tokens
 
-**Reasoning:**
+**Reasoning:** 250 tokens to capture 1-2 comments and gain enough context, overlap of 50 tokens, around 1-2 sentences to cover cass of long comments.
 
 ---
 
@@ -57,11 +57,12 @@ The domain chosen is off-campus housing options and reviews (UCF). This knowledg
      would you weigh in choosing a different embedding model — context length, multilingual
      support, accuracy on domain-specific text, latency? -->
 
-**Embedding model:**
+**Embedding model:** `all-MiniLM-L6-v2` via sentence-transformers. Fast, free to run locally, and works well for short English text like Reddit comments.
 
-**Top-k:**
+**Top-k:** 5. Each chunk is small (1–3 comments), so pulling 5 gives enough variety to cover different apartments or opinions without overloading the LLM.
 
-**Production tradeoff reflection:**
+**Production tradeoff reflection:** 
+`all-MiniLM-L6-v2` is fast and free but cuts off at 256 words and only works in English. For real users I would switch to something like `text-embedding-3-large` since it can handle longer text and is more accurate on specific terms, but it costs money and is slower. Since all my sources are in English, multilingual support isn't a concern at the moment.
 
 ---
 
@@ -74,11 +75,11 @@ The domain chosen is off-campus housing options and reviews (UCF). This knowledg
 
 | # | Question | Expected answer |
 |---|----------|-----------------|
-| 1 | | |
-| 2 | | |
-| 3 | | |
-| 4 | | |
-| 5 | | |
+| 1 | What complexes do students recommend for someone in a budget (under 1000)? | The Pointe, Knights Circle, Mercury 3100, Orion at Orpington, Tivoli|
+| 2 | What complexes do students say have bad management/maintenance/rooms/etc? | Arden Villas, Retreat west, The verge, the Quad, Northgate, Knights Circle, Campus Crossings|
+| 3 | What complexes have shuttles to UCF? | Knights Circle, College Station, Boardwalk, The Verge, Aves at Twelve100, Lark Central Florida, Mercury 3100, Campus Crossings, Nine at Central, Village at Science Drive, Knights Landing, Northgate Lakes, Tivoli, Northview, The Pointe at Central, Riverwind at Alafaya, The Station, Plaza on University, Accolade East and West, Arden Villas, The Lofts, Orion at Orpington |
+| 4 | What housing option do students recommend for first years/freshman? | Students recommend on-campus housing for first years. |
+| 5 | What do students say about Mercury 3100? | Students mention it is affordable, but 'dirty' with weird smell, has good rates but quality is low |
 
 ---
 
@@ -88,9 +89,9 @@ The domain chosen is off-campus housing options and reviews (UCF). This knowledg
      Consider: noisy or inconsistent documents, missing source attribution, off-topic
      retrieval, chunks that split key information across boundaries. -->
 
-1.
+1. Chunks that split information across boundaries, given Reddit comments length can vary (some answers are more detailed than others).
 
-2.
+2. Some comments in the Reddit posts might add noisy data (for example, someone talking about a different topic, or talking about their experience but not mentioning where).
 
 ---
 
@@ -101,6 +102,25 @@ The domain chosen is off-campus housing options and reviews (UCF). This knowledg
      Label each stage with the tool or library you're using.
      You can use ASCII art, a Mermaid diagram, or embed a sketch as an image.
      You'll use this diagram as context when prompting AI tools to implement each stage. -->
+
+```mermaid
+flowchart TD
+    subgraph Indexing["Indexing Pipeline"]
+        A["Document Ingestion\nrequests + BeautifulSoup\n(web scrape Reddit & UCF site)"]
+        A --> B["Chunking\ncustom Python\n500 tokens / 75 token overlap"]
+        B --> C["Embedding\nall-MiniLM-L6-v2\nsentence-transformers"]
+        C --> D[("Vector Store\nChromaDB")]
+    end
+
+    subgraph Query["Query Pipeline"]
+        E["User Query"]
+        E --> F["Embed Query\nall-MiniLM-L6-v2\nsentence-transformers"]
+        F --> G["Retrieval\nChromaDB cosine similarity\ntop-k = 5"]
+        D --> G
+        G --> H["Generation\nGroq API"]
+        H --> I["Answer"]
+    end
+```
 
 ---
 
@@ -117,7 +137,19 @@ The domain chosen is off-campus housing options and reviews (UCF). This knowledg
      with my specified chunk size and overlap" is a plan. -->
 
 **Milestone 3 — Ingestion and chunking:**
+- **Tool:** Claude
+- **Input:** The Chunking Strategy section (250 tokens, 50 overlap) + the documents folder structure
+- **Expected output:** An ingest.py with functions to load txt files and split to chunks
+- **Verification:** Print 5 random chunks and check they are readable, non-empty, have no HTML artifacts, else debug before moving on
 
 **Milestone 4 — Embedding and retrieval:**
+- **Tool:** Claude
+- **Input:** The Retrieval Approach section (model: all-MiniLM-L6-v2, top-k: 5) and chunk output from milestone 3
+- **Expected output:** An embed.py that embeds all chunks with sentence-transformers and stores them in ChromaDB, plus a query() function that returns top-5 most similar chunks for a given input string
+- **Verification:** Run a couple of my evaluation questions through query() and check that the returned chunks are actually related to what is asked and check distance scores are less than 0.5
 
 **Milestone 5 — Generation and interface:**
+- **Tool:** Claude
+- **Input:** The Retrieval Approach section and description of the grounding requirement (LLM must answer from retrieved chunks, not general knowledge)  
+- **Expected output:** An app.py that takes a user query, retrieves top-5 chunks from ChromaDB, passes them to the Groq API (with system restricting answers to given context) and shows the answer plus source documents
+- **Verification:** Run all evaluation questions and check answers cite sources. Ask something off-topic and confirm it doesn't make things up.
